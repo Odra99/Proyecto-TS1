@@ -7,8 +7,8 @@ Esta aplicacion cuenta con los siguientes modulos de informacion
 - Calendario Cholquij
 - Rueda Calendarica
 - Linea del Tiempo
--- Acontecimientos
--- Periodos
+  - Acontecimientos
+  - Periodos
 
 El usuario puede crear un usuario y modificarlo a su preferencia asi como agregar un acontencimiento si lo desea.
 
