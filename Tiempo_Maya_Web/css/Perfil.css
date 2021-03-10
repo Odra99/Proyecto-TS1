@@ -1,7 +1,14 @@
+.container{
+  width: 70%;
+}
+
 .profile-env > header {
   position: relative;
   z-index: 20;
   margin-top: 30px;
+  
+  padding-top: 20px;
+  height: 150px;
 }
 .profile-env > header .profile-picture {
   position: relative;
@@ -27,7 +34,7 @@
   margin: 0;
   padding: 0;
   margin-top: 15px;
-  padding-left: 0;
+  padding-left: 10%;
   list-style: none;
   margin-left: -5px;
 }
@@ -41,7 +48,7 @@
   display: block;
 }
 .profile-env > header .profile-info-sections .profile-name strong {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: normal;
 }
 .profile-env > header .profile-info-sections .profile-name span {
@@ -142,7 +149,6 @@
   position: relative;
   background: #f1f1f1;
   margin-left: -20px;
-  margin-right: -20px;
   padding: 20px;
   margin-top: -20px;
   margin-bottom: 30px;
@@ -543,5 +549,14 @@
   }
   .profile-env > header .profile-info-sections > li + li:after {
     margin: 18px 0;
+  }
+}
+@media (max-width: 994px){
+  .container{
+    width: 80%;
+  }
+  .profile-env section.profile-info-tabs{
+    height: 120px;
+    font-size: 15px;
   }
 }

@@ -1,167 +1,106 @@
 <?php
-session_start();
 
-//$conexion = new mysqli("servidor","usuario","clave","bd")
-$conexion = new mysqli("localhost", "administrador", "Admin.123321", "LineaTiempo");
-/*$sql =  "SELECT * FROM (";
-$sql .= "  SELECT MAX(fecha) as fecha, idHechoHistorico as id ";
-$sql .= "  FROM Edicion ";
-$sql .= "  GROUP BY Edicion.idHechoHistorico ";
-$sql .= ") a";
-$sql .= "GROUP BY a.id";
-*/
-$sql = "CALL mostrarHechos";
-$resultado = $conexion->query($sql);
-$numfilas = $resultado->num_rows;
-echo $numfilas;
-$idhecho = -1;
+$conn = include 'conexion/conexion.php';
+$periodos = $conn->query("SELECT nombre, concat( concat(fechaInicio,' ',ACInicio) ,' - ',concat(fechaFin,' ',ACFin) ) as fechaTotal,descripcion,orden FROM tiempomaya.periodo order by orden;");
+$acontecimientosL = $conn->query("SELECT a.*, concat(a.fechaInicio,' ', a.ACInicio ) as fechaI, concat(a.fechaFin,' ', a.ACFin ) as fechaF, p.orden FROM tiempomaya.acontecimiento as a INNER JOIN tiempomaya.periodo as p WHERE p.nombre = a.Periodo_nombre;");
 ?>
 
 <!DOCTYPE html>
-<html lang="es" dir="ltr">
+<html lang="en">
 
 <head>
-    <title>Linea de Tiempo</title>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/estiloLineaTiempo.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <title>Tiempo Maya - Linea del Tiempo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <?php include "blocks/bloquesCss.html" ?>
+  <link rel="stylesheet" href="css/estilo.css?v=<?php echo (rand()); ?>" />
+  <link rel="stylesheet" href="css/lineaTiempo.css?v=<?php echo (rand()); ?>" />
+
+
+
 </head>
 
 <body>
-    <div>
-        <header id="header" style="background-color: #1C1C1C;">
-            <?php include 'BarradeNavegacion.php'; ?>>
-        </header>
-    </div>
+  <?php include "NavBar.php" ?>
+  <div>
+    <section id="inicio">
+      <div id="inicioContainer" class="inicio-container">
+        <div class="body-wrap">
+          <div class="pres-timeline" id="this-timeline">
+            <div class="periods-container">
+              <?php
+              foreach ($periodos as $periodo) { ?>
+                
+                  <section class="period-single" period="period<?php echo $periodo['orden']; ?>">
+                    <h4 class="year"><?php echo $periodo['fechaTotal'] ?></h4>
+                    <h2 class="title"><?php echo $periodo['nombre'] ?></h2>
+                    <p><?php echo $periodo['descripcion'] ?></p>
+                    <form action="paginaModeloPeriodo.php" method="GET">
+                    <input hidden name="periodo" value="<?php echo $periodo['nombre'] ?>">
+                    <button class=" btn btn-get-started">Ver
+                      <i class="far fa-eye"></i>
+                    </button>
+                    </form>
+                  </section>
+               
 
-    <section>
-        <div class="container" style="padding-top: 120px; height:100px">
-            <div id="myCarousel" class="carousel" data-ride="carousel">
-                <div class="carousel-inner" style="height: 600px; background: url(img/fondo.png);">
-                    <?php
-                    $num = 0;
-                    foreach ($resultado as $hecho) : ?>
-                        <?php
-                        $sqlCat = "SELECT idHechoHistorico, nombre FROM Categorizar 
-                            inner JOIN Categoria ON Categorizar.idCategoria = Categoria.idCategoria
-                             WHERE Categorizar.idHechoHistorico= " . $hecho['id'];
-                        $cat = $conexion->query($sqlCat);
-                        $cat1;
-                        foreach ($cat as $categoria1) :
-                            $cat1 = $categoria1['nombre'];
-                        endforeach;
-                        if ($num == 0) {
-                            echo '<div class="item active" style="height: 600px;">';
-                            $num =  $num + 1;
-                        } else {
-                            $num = $num + 1;
-                            echo '<div class="item " style="height: 600px;">';
-                        }
-
-                        ?>
-                        <div class="carousel-caption" style=" padding-top: 20px;">
-                            <div style="height: 360px;">
-                                <img id="imagen<?php echo $num ?>" src="https://img.vixdata.io/pd/jpg-large/es/sites/default/files/imj/7-misterios-de-la-cultura-maya-que-despertaran-tu-curiosidad.jpg" alt="Paisaje-02" class="imagen">
-                                <div id="desc<?php echo $num ?>" style="display: none;">
-                                    <div class="card" id="transparencia" style=" padding-top: 25%;">
-                                        <div class="card-body" style="padding-left: 5%;padding-right:5%">
-                                            <h5 class="card-title">Descripcion</h5>
-                                            <p class="card-text" style="text-align: justify; "><?php echo $hecho['descripcion'] ?></p>
-                                            <form action="editarLineaTiempo.php" method="post">
-                                                <input  type="hidden"  name="idHecho" value="<?php echo $hecho['id'] ?>" >
-                                                <button type="submit" class="btn btn-primary">Editar</button>
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="transparencia">
-                                <h1 class='titulo' style="margin-bottom: 10px; color:black"> <?php echo $hecho['titulo']; ?></h1>
-                                <p class='fecha' style=""> Fecha: <?php echo date("d/m/Y", strtotime($hecho['fechaInicio'])) ?></p>
-                                <button class="btn btn-primary owl-slide-animated owl-slide-cta" style="margin-bottom: 20px; ">
-                                    <a class="scrollNavigation" onclick="MostrarDetalles('desc<?php echo $num ?>', 'imagen<?php echo $num ?>');" href="#detalles">Leer Mas</a>
-                                </button>
-                            </div>
-                        </div>
-                </div>
-            <?php endforeach; ?>
+              <?php
+              }
+              ?>
+              <div class="btn-back"></div>
+              <div class="btn-next"></div>
             </div>
+            <div class="timeline-container">
+              <div class="timeline"></div>
+              <div class="btn-back"><svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="none" d="M0 0h30v30H0z" />
+                  <path fill="#D8D8D8" fill-rule="evenodd" d="M11.828 15l7.89-7.89-2.83-2.828L6.283 14.89l.11.11-.11.11L16.89 25.72l2.828-2.83" />
+                </svg></div>
+              <div class="btn-next"><svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="none" d="M0 0h30v30H0z" />
+                  <path fill="#D8D8D8" fill-rule="evenodd" d="M18.172 14.718l-7.89-7.89L13.112 4l10.606 10.607-.11.11.11.11-10.608 10.61-2.828-2.83 7.89-7.89" />
+                </svg></div>
+            </div>
+            <div class="cards-container">
+              <?php
+              $i = 1;
+              foreach ($acontecimientosL as $acontecimiento) { ?>
+               
+                  <?php if ($i == 1) { ?>
+                    <section class="card-single active" period="period<?php echo $acontecimiento['orden']; ?>">
+                    <?php } else { ?>
+                      <section class="card-single" period="period<?php echo $acontecimiento['orden']; ?>">
+                      <?php } ?>
+                      <h4 class="year"><?php echo $acontecimiento['fechaI'];
+                                        if ($acontecimiento['fechaF'] != '  ') {
+                                          echo " - " . $acontecimiento['fechaF'];
+                                        } ?></h4>
+                      <h2 class="title"><?php echo $acontecimiento['titulo']; ?></h2>
+                      <form action="acontecimiento.php" method="GET">
+                      <input hidden name="categoria" value="<?php echo $acontecimiento['categoria']; ?>">
+                      <button class=" btn btn-get-started">Ver
+                        <i class="far fa-eye"></i>
+                      </button>
+                      </form>
+                      </section>
+              
 
-            <!-- Controles izquierda-derecha -->
-            <a class="left carousel-control" onclick="ocultarDetalles();" href="#myCarousel" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-                <span class="sr-only">Anterior</span>
-            </a>
-            <a class="right carousel-control" onclick="ocultarDetalles();" href="#myCarousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-                <span class="sr-only">Siguiente</span>
-            </a>
+              <?php $i++;
+              }
+              ?>
+            </div>
+          </div>
         </div>
-
-        </div>
+      </div>
     </section>
-
-    <section style="padding-top: 700px;">
-
-
-    </section>
+  </div>
 
 
-    <footer id="footer">
-        <?php
-        if (isset($_SESSION['nombre'])) {
-            echo '<div class="container">
-            <div class="padre">
-                <div style="color: black; padding-left: 5%;">
-                    <div class="card-header">
-                        Falta un hecho importante?
-                    </div>
-                    <div>
-                        <h5 class="card-title" style="color:black">AGREGA NUEVOS HECHOS HISTORICOS</h5>
-                        <button class="btn btn-primary owl-slide-animated owl-slide-cta" style="margin-bottom: 20px; ">
-                            <a style="color: black; " class="scrollNavigation" href="insertarLineaTiempo.php">AGREGAR</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>';
-        }
-        ?>
+  <?php include "blocks/bloquesJs.html" ?>
 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
-        <div class="container">
-            <div class="copyright">
-                &copy; Copyright <strong>Teoria de Sistemas</strong>. Derechos Reservados
-            </div>
-        </div>
-    </footer>
-
-    <script type=" text/javascript">
-        var id1;
-        var im;
-
-        function MostrarDetalles(id, imag) {
-            var desc = document.getElementById(id);
-            desc.style.display = "block";
-            id1 = id;
-            im = imag;
-            var imagen = document.getElementById(imag);
-            imagen.style.display = "none";
-            return true;
-        }
-
-        function ocultarDetalles() {
-            var desc = document.getElementById(id1);
-            desc.style.display = "none";
-            var imagen = document.getElementById(im);
-            imagen.style.display = "block";
-            return true;
-        }
-    </script>
+  <script src="js/LineaTiempo.js"></script>
 </body>
+
+</html>

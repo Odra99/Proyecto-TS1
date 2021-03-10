@@ -1,166 +1,128 @@
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tiempo Maya</title>
-
-
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="css/imagehover.min.css">
-
-  <link rel="stylesheet" type="text/css" href="css/estiloPerfil2.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-<script src="https://kit.fontawesome.com/e51fb510f5.js" crossorigin="anonymous"></script>
-
+  <title>Tiempo Maya - Editar Perfil</title>
+  <?php include "blocks/bloquesCss.html" ?>
+  <link rel="stylesheet" href="css/estilo.css?v=<?php echo (rand()); ?>" />
+  <link rel="stylesheet" href="css/registroSesion.css?v=<?php echo (rand()); ?>" />
+  <link rel="stylesheet" href="css/editarPerfil.css?v=<?php echo (rand()); ?>" />
 </head>
-<?php include "BarradeNavegacion.php" ?>
+<?php include "NavBar.php" ?>
+<?php include "backend/verificarSesion.php"?>
+<?php include "backend/obtenerDatosUsuario.php" ?>
+
 <body>
-
-<section id="inicio">
-<div  >
-    <div class="container-fluid mt--7" >
-      <div class="row">
-        <div class="col-xl-4 order-xl-1 mb-5 mb-xl-0" style="margin-top: 250px;margin-left: 10%;">
-          <div class="card card-profile shadow">
-            <div class="row justify-content-center">
-              <div class="col-lg-3 order-lg-2">
-                <div class="card-profile-image">
-                  <a href="#">
-                    <img src="img/perfil.jpg" class="rounded-circle">
-                  </a>
-                </div>
-              </div>
-            </div>
-              <div class="card-body pt-0 pt-md-4" style="margin-top:50px;">
-              <div class="row">
-                <div class="col">
-                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
-                    <div>
-                      <span class="heading">643</span>
-                      <span class="description">Publicaciones</span>
-                    </div>
-                    <div>
-                      <span class="heading">108</span>
-                      <span class="description">Me gusta</span>
-                    </div>
-
+  <div>
+    <section id="inicio">
+      <div id="inicioContainer" class="inicio-container">
+        <div class="inner" style="padding-top: 0px;margin-top: 85px;">
+          <div class="row" style="width: 45%;">
+            <div class="profile ">
+              <form action="backend/guardarFoto.php" method="POST">
+                <div class="avatar-upload">
+                  <div class="avatar-edit" style="left: 200px;">
+                    <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg ,.jfif" />
+                    <label style="background-color: black;" for="imageUpload"><i class="far fa-edit"></i></label>
+                    <textarea type="text" name="path" id="path" hidden></textarea>
+                    <input hidden name="correo" value="<?php print($user['correo']) ?>">
                   </div>
+                  <div class="avatar-preview">
+                    <div id="previsualizacion" style="background-image: url(<?php echo $foto ?>);">
+                    </div>
+                  </div>
+                  <button class="btn btn-get-started" style="width: 260px;">Guardar Foto
+                    <i class="far fa-save"></i>
+                  </button>
                 </div>
-              </div>
-              <div class="text-center">
-                <h3>
-                  Luis Ruiz  <span class="font-weight-light"> <br> Batz</span>
-                </h3>
-                <div class="h5 mt-4">
-                  <i class="ni business_briefcase-24 mr-2"></i>Historiador
-                </div>
-
-
+              </form>
+            </div>
+            <div>
+              <label><?php print($user['nombre'] . ' ' . $user['apellido']) ?></label><br>
+              <span>
+                <a href="#">Nahual <?php print($nahual) ?> <br> Energia <?php print($energia) ?></a>
+              </span>
+              <hr>
+              <div class="profile-stat">
+                <span data-toggle="counter-up" style="color: white;"><?php print($number) ?></span><br>
+                <span>
+                  <a>Mis Aportes</a>
+                </span>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-xl-6 order-xl-2" style="margin-top: 250px;">
-            <form action="#" method="post">
-              <input type="text" value="../perfil.php" name="direccion" hidden/>
-          <div class="card bg-secondary shadow">
-            <div class="card-header bg-white border-0">
-              <div class="row align-items-center">
-                <div class="col-8">
-                  <h3 class="mb-0">Mi cuenta</h3>
-                </div>
-                <div class="col-4 text-right">
-                  <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Guardar</button>
-                </div>
-              </div>
+          <form action="backend/actualizarUsuario.php" method="POST" style="margin-top: 60px;">
+            <h1>Informacion de Usuario</h1>
+            <div class="form-group d-flex justify-content-between">
+              <label for="nombre">Nombre</label>
+              <label for="apellido">Apellido</label>
             </div>
-            <div class="card-body">
-
-                <h6 class="heading-small text-muted mb-4">Informacion de usuario</h6>
-                <div class="pl-lg-4">
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-username">Usuario</label>
-                            <input type="text" name="usuarioAntiguo"  hidden value="<?php echo $usuario['usuario']  ?>" />
-                        <input type="text" name="usuario" class="form-control form-control-alternative" placeholder="Username" value="Luis Ruiz" />
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <div class="form-group">
-                        <label class="form-control-label" for="input-email">Correo</label>
-                        <input type="email" name="correo" class="form-control form-control-alternative" placeholder="jesse@example.com"  value=" luisRuiz@tiempoMaya.com "/>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-4">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-first-name">Nombre</label>
-                        <input type="text" name="nombre" class="form-control form-control-alternative" placeholder="Nombre"  value="Luis Eduardo"/>
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-last-name">Apellido</label>
-                        <input type="text" name="apellido" class="form-control form-control-alternative" placeholder="Apellido"  value="Guillen Ruiz"/>
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-last-name">contraseña</label>
-                        <input type="password" name="password" class="form-control form-control-alternative" placeholder="******"  value="Fatima" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr class="my-4">
-
-                <h6 class="heading-small text-muted mb-4">Informacion de contacto</h6>
-                <div class="pl-lg-4">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Telefono</label>
-                        <input name="telefono" class="form-control form-control-alternative" placeholder="Telefono"  value=" +502 52364178 " type="text"/>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-                <hr class="my-4">
-
-
-
+            <div class="form-group">
+              <input type="text" required class="form-control" id="nombre" name="nombre" value="<?php print($user['nombre']); ?>">
+              <input type="text" required class="form-control" id="apellido" name="apellido" value="<?php print($user['apellido']); ?>">
             </div>
-          </div>
-            </form>
+            <div class="form-group ">
+              <label for="usuario">Usuario</label>
+            </div>
+            <div class="form-wrapper">
+              <input type="text" id="usuario" class="form-control" name="usuario"  value="<?php print($user['usuario']) ?>">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="form-group ">
+              <label for="correo">Correo</label>
+            </div>
+            <div class="form-wrapper">
+              <input type="email" required id="correo" class="form-control" name="correo" value="<?php print($user['correo']) ?>">
+              <i class="fas fa-at"></i>
+            </div>
+            <div class="form-group d-flex justify-content-between">
+              <label for="celular">Celular</label>
+              <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            </div>
+            <div class="form-group">
+              <input type="text" autocomplete="off" pattern="[0-9]{8}" minlength="8" name='celular' maxlength="8" class="form-control" id="celular" value="<?php print($user['celular']) ?>">
+              <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="<?php print($user['fechaNacimiento']) ?>">
+            </div>
+            <div class="form-group ">
+              <label for="password">Nueva Contraseña</label>
+            </div>
+            <div class="form-wrapper">
+              <input type="password" id="password"  class="form-control" name="password">
+              <i class="fas fa-lock"></i>
+            </div>
+            <button class="btn btn-get-started">Guardar
+              <i class="far fa-save"></i>
+            </button>
+          </form>
         </div>
       </div>
-    </div>
+    </section>
   </div>
+  <script type="text/javascript">
+    jQuery(document).ready(function($) {
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            $('#previsualizacion').css('background-image', 'url(' + e.target.result + ')');
+            $('#previsualizacion').hide();
+            $('#previsualizacion').fadeIn(650);
+            $('#path').val(e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+      $("#imageUpload").change(function() {
+        readURL(this);
+      });
+    });
+  </script>
 
-</div>
-</section>
-<footer id="footer">
 
-  <div class="container">
-    <div class="copyright">
-      &copy; Copyright <strong>Teoria de Sistemas</strong>. Derechos Reservados
-    </div>
-  </div>
-</footer>
-
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery.easing.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/custom.js"></script>
-
-
+  <?php include "blocks/bloquesJs.html" ?>
 </body>
 
 </html>
