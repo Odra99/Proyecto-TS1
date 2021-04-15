@@ -1,6 +1,4 @@
-<?php
-
-?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,9 +12,9 @@
 </head>
 
 <body>
-
+<?php include "backend/verificarSesionAdmin.php"?>
   <?php include "NavBarAdmin.php" ?>
-  <?php include "backend/verificarSesionAdmin.php"?>
+ 
   <div>
     <section id="inicio">
       <div id="inicioContainer" class="inicio-container">

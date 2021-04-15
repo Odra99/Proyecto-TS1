@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 
 $conn = include 'conexion/conexion.php';

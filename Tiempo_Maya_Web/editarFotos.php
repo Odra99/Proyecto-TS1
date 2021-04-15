@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 $conn = include 'conexion/conexion.php';
 if (isset($_POST['nombre'])) {
@@ -24,7 +25,7 @@ $array = "";
     <link rel="stylesheet" href="css/registroSesion.css?v=<?php echo (rand()); ?>" />
     <link rel="stylesheet" href="css/editarPerfil.css?v=<?php echo (rand()); ?>" />
 </head>
-<?php include "NavBar.php" ?>
+<?php if (isset($_POST['admin'])){include "NavBarAdmin.php";}else{ include "NavBar.php"; }?>
 <?php include "backend/verificarSesion.php"?>
 
 <body onload="updateArray()">

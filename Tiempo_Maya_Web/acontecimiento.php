@@ -1,4 +1,6 @@
+<?php session_start(); ?>
 <?php
+
 if(isset($_GET['categoria'])){
     $categoria = $_GET['categoria'];
     $connection = include 'conexion/conexion.php';

@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 if (isset($_GET['t']) && isset($_GET['n'])) {
     $table = $_GET['t'];
@@ -64,6 +65,7 @@ if (isset($_GET['t']) && isset($_GET['n'])) {
                             <form action="editarFotos.php" method="POST"> 
                                 <button class="btn btn-get-started" type="submit" >Subir Fotos <i class="far fa-save"></i></button>
                                 <input hidden type="text" name="nombre" value="<?php echo $nombre ?>">
+                                <input hidden type="text" name="admin" value="1">
                             </form>
                         </div>
                     </div>

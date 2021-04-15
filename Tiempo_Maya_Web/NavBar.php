@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 $conn = include 'conexion/conexion.php';
 $uinalesNav = $conn->query("SELECT nombre FROM tiempomaya.uinal order by nombre;");
 $nahualesNav = $conn->query("SELECT nombre FROM tiempomaya.nahual order by nombre;");

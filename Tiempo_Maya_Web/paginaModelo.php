@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 
 $conn = include 'conexion/conexion.php';
@@ -46,13 +47,13 @@ $elementos = $conn->query("SELECT nombre FROM tiempomaya.pagina WHERE categoria=
         foreach ($informacion as $info) {
             if ($seccion['seccion'] == $info['seccion']) {
                 if ($info['seccion'] != "Informacion") {
-                    
-                $stringPrint .= "<a href='paginaModeloElemento.php?elemento=" . $info['nombre'] . "'/>" . $info['nombre'] . " </a>";
+
+                    $stringPrint .= "<a href='paginaModeloElemento.php?elemento=" . $info['nombre'] . "'/>" . $info['nombre'] . " </a>";
                 }
                 $stringPrint .= "<hr>";
                 $stringPrint .= $info['htmlCodigo'];
                 foreach ($elementos as $elemento) {
-                    if ($elemento['nombre'] != 'Kin' && $elemento['nombre'] != 'Uayeb' && $elemento['nombre'] == $info['nombre']) {
+                    if ($elemento['nombre'] != 'Uayeb' && $elemento['nombre'] == $info['nombre']) {
                         $tabla = strtolower($elemento['nombre']);
                         $elementosEl = $conn->query("SELECT nombre FROM tiempomaya." . $tabla . ";");
                         $stringPrint .= "<ul>";

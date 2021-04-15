@@ -1,8 +1,9 @@
+<?php session_start(); ?>
 <?php
 
 $conn = include 'conexion/conexion.php';
 $periodos = $conn->query("SELECT nombre, concat( concat(fechaInicio,' ',ACInicio) ,' - ',concat(fechaFin,' ',ACFin) ) as fechaTotal,descripcion,orden FROM tiempomaya.periodo order by orden;");
-$acontecimientosL = $conn->query("SELECT a.*, concat(a.fechaInicio,' ', a.ACInicio ) as fechaI, concat(a.fechaFin,' ', a.ACFin ) as fechaF, p.orden FROM tiempomaya.acontecimiento as a INNER JOIN tiempomaya.periodo as p WHERE p.nombre = a.Periodo_nombre;");
+$acontecimientosL = $conn->query("SELECT a.*, concat(a.fechaInicio,' ', a.ACInicio ) as fechaI, concat(a.fechaFin,' ', a.ACFin ) as fechaF, p.orden FROM tiempomaya.acontecimiento as a INNER JOIN tiempomaya.periodo as p WHERE p.nombre = a.Periodo_nombre order by p.orden;");
 ?>
 
 <!DOCTYPE html>
