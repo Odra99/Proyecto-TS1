@@ -12,5 +12,5 @@ if (!(isset($_POST['path']))) {
     }
     $connection->close();
 }
-//header('location: '.$url.$mensaje);
+header('location: '.$url.$mensaje);
 ?>

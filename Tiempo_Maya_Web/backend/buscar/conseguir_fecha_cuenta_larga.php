@@ -67,4 +67,7 @@ if ($number4 > 19) {
     $pivot = -1;
 }
 $number5=12+$pivot;
+
+echo "Fecha Cuenta Larga ".strval($number5).".".strval($number4).".".strval($number3).".".strval($number2).".".strval($number1);
+
 ?>

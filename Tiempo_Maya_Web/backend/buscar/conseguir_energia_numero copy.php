@@ -7,7 +7,7 @@ if($nn<0){
 	$nn=12+$nn;
 }
 if($nn==12){
-	return 1;
+	echo "Energia ".strval(1);
 }else{
-	return $nn+2;
+	echo "Energia ".strval ($nn+2);
 }?>

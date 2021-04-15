@@ -14,12 +14,14 @@ if (isset($_POST['tabla']) && isset($_POST['nombre'])) {
         mkdir($nameDir);
     }
     foreach ($html->find('img') as $element) {
+        
         $convertir = $element->src;
         $data = mb_split(',', $convertir);
         $type = mb_split(';', mb_split('/', $data[0])[1])[0];
         $imgBinary = base64_decode($data[1]);
         $imgName = str_replace("../",'',$nameDir) . '/' . $i . "." . $type;
-        file_put_contents($imgName, $imgBinary);
+        
+        file_put_contents($nameDir. '/' . $i . "." . $type, $imgBinary);
         $element->src = $imgName;
         $i++;
     }
@@ -37,9 +39,9 @@ if (isset($_POST['tabla']) && isset($_POST['nombre'])) {
         $mensaje = "mensaje=La informacion no se pudo actualizar";
     }
     $conn->close();
-    header('location: ../administracion.php?'.$mensaje);
+ // header('location: ../administracion.php?'.$mensaje);
 } else {
-   header('location: ../administracion.php?mensaje=Error en actualizar informacion');
+ //header('location: ../administracion.php?mensaje=Error en actualizar informacion');
 }
 
 function deleteDirectory($dir)
@@ -47,6 +49,7 @@ function deleteDirectory($dir)
     if (!$dh = @opendir($dir)) return;
     while (false !== ($current = readdir($dh))) {
         if ($current != '.' && $current != '..') {
+
             if (!@unlink($dir . '/' . $current))
                 deleteDirectory($dir . '/' . $current);
         }
